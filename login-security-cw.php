@@ -2,19 +2,36 @@
 /*
 Plugin Name: Login Security CW
 Plugin URI: http://www.arduinoturk.com
-Description: Bu eklenti wordpress giriş sayfanıza fazladan parametre oluşturup tipik wordpress giriş adresinden kurtulmanızı ve brute force ihtimalini ortadan kaldırmak için oluşturulmuştur.
-Version: 1.0.1
+Description: Which is one of the most popular methods of attack against brute force attacks on the login page is protected.
+Version: 1.0.2
 Author: Selim Şimşek
 Author URI: http://www.arduinoturk.com
 License: GNU
 */
 
-// en-US , tr-TR
+
 if (preg_match('#' . basename(__FILE__) . '#', $_SERVER['PHP_SELF'])){ die('You are not allowed to call this page directly.'); }
 
-
+load_plugin_textdomain('login-security-cw', $path = 'wp-content/plugins/login-security-cw/lang');
 
 function kontrol(){
+	print '<style type="text/css">
+		.login_warn{
+			padding:0 20px;
+			color:#f00;
+			font-weight:bold;
+			margin:100px auto 0 auto;
+			width:400px; text-align:center;
+		}
+		.login_warn_bottom{
+			margin:0 auto;
+			width:400px;
+			text-align:center;
+			font-weight:bold;
+			font-size:10px;
+			color:#21C233;
+		}
+	</style>';
 	$d_adi = get_option("d_adi");
 	$d_deger = get_option("d_deger");
 	if($_GET["email"] and $_GET["email"] == get_option('admin_email')){
@@ -25,7 +42,8 @@ function kontrol(){
 }
 
 function form_gizle(){
-	print '<p style="padding:0 20px; color:#f00; font-weight:bold; margin:100px auto 0 auto; width:400px; text-align:center;">Giriş başarısız, doğru şekilde giriş yapmayı deneyeniz..</p><p style="margin:0 auto; width:400px; text-align:center; font-weight:bold; font-size:10px; color:#21C233;">Login Security CW</p>';
+	print '<p class="login_warn">'; _e('Login failed, please try to log correctly ..','login-security-cw'); print '</p>
+	<p class="login_warn_bottom">'; _e('Login Security CW','login-security-cw'); print '</p>';
 	exit;
 }
 function link_goster(){
@@ -38,11 +56,13 @@ function link_goster(){
 function lscw_style() {
 	print '<style type="text/css">
 	.login-security-cw{
-		margin:20px 0;
+		margin:50px auto;
 		padding:0 20px 20px 20px;
 		width:560px;
 		background-color:#fff;
 		border:1px solid #ddd;
+		border-right-color:#ccc;
+		border-bottom-color:#ccc;
 	}
 	.login-security-cw input[type=text]{
 		display:block;
@@ -116,7 +136,7 @@ function secenekleri_kaldir(){
 
 
 function plugin_add_settings_link($links){
-    $settings_link = '<a href="options-general.php?page=login-security-cw">Ayarlar</a>';
+    $settings_link = '<a href="options-general.php?page=login-security-cw">'.__('Settings','login-security-cw').'</a>';
   	array_push( $links, $settings_link );
   	return $links;
 }
@@ -136,6 +156,7 @@ function lscw(){
 ?>
 <div class="login-security-cw">
 	<h2>Login Security CW</h2>
+	<a href=""></a>
 <?php
 	if(isset($_POST["ayarlar"]) and $_POST["ayarlar"] == 'guncellendi'){
 		$d_adi = strip_tags(htmlspecialchars(t_karakter_temizle($_POST['d_adi'])));
@@ -143,18 +164,18 @@ function lscw(){
         update_option('d_adi', $d_adi);
         update_option('d_deger', $d_deger);
 ?>
-<div class="updated"><p><strong><?php _e('Değişiklikler kaydedildi.'); ?></strong></p></div>
+<div class="updated"><p><strong><?php _e('Save Changes','login-security-cw'); ?></strong></p></div>
 <?php
 	}
 ?>
 <form method="post" action="">
-	<label for="d_adi">Değişken Adı:</label>
+	<label for="d_adi"><?php _e('Variable Name','login-security-cw'); ?></label>
 	<input type="text" id="d_adi" name="d_adi" value="<?php print get_option("d_adi"); ?>"/>
-	<label for="d_degeri">Değişken Değeri:</label>
+	<label for="d_degeri"><?php _e('Variable Value','login-security-cw'); ?></label>
 	<input type="text" id="d_deger" name="d_deger" value="<?php print get_option("d_deger"); ?>"/>
 	<input type="hidden" id="ayarlar"name="ayarlar" value="guncellendi" />
-	<input type="submit" id="submit" name="submit" value="<?php _e('Save Changes'); ?>"/>
-	<div class="link_title">Login Adresi :</div>
+	<input type="submit" id="submit" name="submit" value="<?php _e('Save Changes','login-security-cw'); ?>"/>
+	<div class="link_title"><?php _e('Login Link','login-security-cw'); ?></div>
 	<div class="link"><?php bloginfo("url"); ?>/wp-login.php?<?php echo get_option("d_adi"); ?>=<?php echo get_option("d_deger"); ?></div>
 </form>
 </div>
@@ -167,6 +188,6 @@ add_filter( "plugin_action_links_$plugin", 'plugin_add_settings_link' );
 add_action('admin_head', 'lscw_style');
 add_action('admin_menu', 'lgcw_yonetim');
 add_action('login_form','kontrol');
-add_action('login_head', 'kontrol');
+add_action('login_head', 'kontrol');s
 
  ?>
