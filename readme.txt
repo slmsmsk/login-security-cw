@@ -39,8 +39,6 @@ A special thanks to all CW users..
 
 == Changelog ==
 
-For more information, see [Releases](http://www.arduinoturk.com)
-
 = 1.0.1 =
 
 * Added new feature for forgotten parameters
