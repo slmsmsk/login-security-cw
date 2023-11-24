@@ -1,6 +1,6 @@
 === Login Security Cw ===
 Contributors: slmsmsk
-Donate link: http://www.arduinoturk.com
+Donate link: http://ssimsek.net
 Tags: Brute, Force, Attack, Security, Login, Page
 Requires at least: 3.0.1
 Tested up to: 4
